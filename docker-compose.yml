@@ -1,0 +1,38 @@
+services:
+  # --- DOMÍNIO A ---
+  idp-a:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: idp-a
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # Em produção, usaríamos um banco Postgres real.
+      # Para o desafio, o modo dev (H2 database) é aceitável e mais leve.
+    ports:
+      - "8081:8080" # Mapeia a porta 8080 do container para 8081 no seu PC
+    networks:
+      - rede_dominio_a
+    volumes:
+      - ./infra/dom-a/keycloak-data:/opt/keycloak/data/h2 # Persistência simples
+
+  # --- DOMÍNIO B ---
+  idp-b:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: idp-b
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8082:8080" # Mapeia a porta 8080 do container para 8082 no seu PC
+    networks:
+      - rede_dominio_b
+    volumes:
+      - ./infra/dom-b/keycloak-data:/opt/keycloak/data/h2
+
+networks:
+  rede_dominio_a:
+    driver: bridge
+  rede_dominio_b:
+    driver: bridge
