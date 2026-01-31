@@ -93,5 +93,7 @@ def logout():
     return redirect('/')
 
 if __name__ == '__main__':
-    # Roda na porta 5000
-    app.run(debug=True, port=5000)
+    # host='0.0.0.0' é OBRIGATÓRIO para o Docker conseguir acessar o Flask
+    app.run(debug=True, port=5000, host='0.0.0.0')
+
+    
